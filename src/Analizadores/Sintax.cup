@@ -1,0 +1,52 @@
+package Analizadores;
+
+import java_cup.runtime.Symbol;
+import java.util.LinkedList;
+
+parser code
+{:
+    private Symbol s;
+    public static LinkedList caracteresI = new LinkedList();
+    public static LinkedList Conjunto = new LinkedList();
+    public static LinkedList Conjuntos = new LinkedList();
+    
+    public static LinkedList Probar = new LinkedList();
+    public static LinkedList EProbar = new LinkedList();
+
+    public static LinkedList ExpR = new LinkedList();
+    public static LinkedList ExpS = new LinkedList();
+    public static LinkedList ExpT = new LinkedList();
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal PTCOMA, Reservadas, SEPARADOR, STRING, LLAVEI,LLAVEF, DPUNTOS, FLECHA, Identificador, TILD, ERROR, LETRAU, DIGITU,SIMBOLO,
+    PUNTO, ASTERISCO, BARRA, PARENTESISI, PARENTESISF, CORCHETEI, CORCHETEF,COMA,INTERROG,MAS; 
+non terminal INICIO, decConjuntos, tConjuntos,vConj, vConjL, vConjD, Probador, ExpReg, ER, CONTENIDO, CABECERA, PIE;
+
+start with INICIO;
+
+INICIO ::=LLAVEI CONTENIDO LLAVEF;
+
+CONTENIDO ::= CABECERA SEPARADOR PIE;
+CABECERA ::= decConjuntos CABECERA | ExpReg CABECERA | decConjuntos | ExpReg;
+PIE ::= Probador PIE | Probador;
+
+decConjuntos ::= Reservadas:r DPUNTOS Identificador FLECHA tConjuntos:a PTCOMA     {: RESULT = a; Conjunto.add(r); Conjunto.add(a); Conjuntos.add(Conjunto); Conjunto= new LinkedList(); :}; 
+tConjuntos ::= LETRAU:a  TILD LETRAU:c {: RESULT=a+"-"+c; :}| DIGITU:a TILD DIGITU:c {: RESULT=a+"-"+c; :}| vConj {:  RESULT=caracteresI; caracteresI = new LinkedList(); :};
+
+vConj ::= LETRAU:a {: caracteresI.add(a+""); :} | LETRAU:a vConjL {: caracteresI.add(a+""); :} | DIGITU:a {: caracteresI.add(a+""); :} | DIGITU:a vConjD {: caracteresI.add(a+""); :};
+vConjL ::= COMA LETRAU:a vConjL  {: caracteresI.add(a+""); :} | COMA LETRAU:a {: caracteresI.add(a+""); :};
+vConjD ::= COMA DIGITU:a vConjD {: caracteresI.add(a+""); :} | COMA DIGITU:a {: caracteresI.add(a+""); :};
+
+Probador ::= Identificador:r DPUNTOS STRING:a PTCOMA {: RESULT = a; Probar.add(r); Probar.add(a); EProbar.add(Probar); Probar= new LinkedList();  :}; 
+
+ExpReg ::= Identificador:r FLECHA ER:a PTCOMA {: RESULT = a; ExpS.add(r); ExpS.add(ExpR); ExpT.add(ExpS); ExpR= new LinkedList(); ExpS= new LinkedList(); :};
+ER ::= LLAVEI:a Identificador:b LLAVEF:c {: ExpR.add(a+""+b+""+c); :}| ASTERISCO:a {: ExpR.add(a+""); :}| MAS:a {: ExpR.add(a+""); :} | INTERROG:a {: ExpR.add(a+""); :} | BARRA:a {: ExpR.add(a+""); :} | PUNTO:a {: ExpR.add(a+""); :} | STRING:a {: ExpR.add(a+""); :} | CORCHETEI:a tConjuntos:b CORCHETEF:c {: ExpR.add(a+""+b+""+c); :} | LLAVEI:a Identificador:b LLAVEF:c  {: ExpR.add(a+""+b+""+c); :} ER| ASTERISCO:a {: ExpR.add(a+""); :} ER | MAS:a {: ExpR.add(a+""); :} ER | INTERROG:a {: ExpR.add(a+""); :} ER | BARRA:a {: ExpR.add(a+""); :} ER | PUNTO:a {: ExpR.add(a+""); :} ER | STRING:a {: ExpR.add(a+""); :} ER | CORCHETEI:a tConjuntos:b CORCHETEF:c {: ExpR.add(a+""+b+""+c); :} ER;
+
