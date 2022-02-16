@@ -1,0 +1,23 @@
+digraph structs {
+    node [shape=record];
+    label = "ExpresionReg2: (({letra}.('_'|({letra}|{digito}))+).{FIN})";
+    Nodo10 [label="{ N |{[1]|<here> . |[5]}| }" color="white"];
+    Nodo8 [label="{ N |{[1]|<here> . |[2, 3, 4]}| }" color="white"];
+    Nodo1 [label="{ N |{[1]|<here> letra |[1]}| 1}" color="white"];
+    Nodo7 [label="{ N |{[2, 3, 4]|<here> + |[2, 3, 4]}| }" color="white"];
+    Nodo6 [label="{ N |{[2, 3, 4]|<here> \| |[2, 3, 4]}| }" color="white"];
+    Nodo2 [label="{ N |{[2]|<here> '_' |[2]}| 2}" color="white"];
+    Nodo5 [label="{ N |{[3, 4]|<here> \| |[3, 4]}| }" color="white"];
+    Nodo3 [label="{ N |{[3]|<here> letra |[3]}| 3}" color="white"];
+    Nodo4 [label="{ N |{[4]|<here> digito |[4]}| 4}" color="white"];
+    Nodo9 [label="{ N |{[5]|<here> FIN |[5]}| 5}" color="white"];
+    Nodo10:here -> Nodo8:here [color="orange"];
+    Nodo10:here -> Nodo9:here [color="orange"];
+    Nodo8:here -> Nodo1:here [color="orange"];
+    Nodo8:here -> Nodo7:here [color="orange"];
+    Nodo7:here -> Nodo6:here [color="orange"];
+    Nodo6:here -> Nodo2:here [color="orange"];
+    Nodo6:here -> Nodo5:here [color="orange"];
+    Nodo5:here -> Nodo3:here [color="orange"];
+    Nodo5:here -> Nodo4:here [color="orange"];
+}

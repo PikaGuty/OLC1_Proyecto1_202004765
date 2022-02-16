@@ -227,11 +227,13 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void btnAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarActionPerformed
+        txtSalida.setText("");        
         //String ST = txtArchivo.getText();
         //Sintax s = new Sintax(new LexC(new StringReader(ST)));
         Sintax sintactico = new Sintax(new LexC(new BufferedReader( new StringReader(txtArchivo.getText()))));
         try {
             
+            LinkedList ER = new LinkedList();
             sintactico.parse();
             //LinkedList Conjuntos = sintactico.Conjuntos;
             //LinkedList a = (LinkedList) Conjuntos.getFirst();
@@ -240,19 +242,45 @@ public class Principal extends javax.swing.JFrame {
             //LinkedList Pruebas = sintactico.EProbar;
             //System.out.println(Pruebas);
             
-            LinkedList ER = sintactico.ExpT;
-            Metodos.ordenarExpresionRegular(ER);
+            ER = sintactico.ExpT;
+            LinkedList ERR=Metodos.ordenarExpresionRegular(ER);
             //System.out.println(ER);
+            for (int i = 0; i < ER.size(); i++) {
+                Metodos.TablaSig = new LinkedList();
+                LinkedList Actual = (LinkedList) ERR.get(i);
+                Metodos.Nodo ac = (Metodos.Nodo) Actual.getLast();
+                //System.out.println("CONTENIDO "+Actual.getFirst()+Actual.get(1));
+                Metodos.con=1;
+                Metodos.noNodo=1;
+                //***** VERIFICANDO ANULABLES *****
+                Metodos.parametrosArbolito(ac);
+                Metodos.parametros2Arbolito(ac);
+                //*********************************
+                Metodos.listaPrimeros(ac);
+                Metodos.listaUltimos(ac);
+                Metodos.grafica(ac,""+Actual.getFirst()+": "+Actual.get(1));
+                //Metodos.recorrerArbolito(ac);
+                //System.out.println(Metodos.dot);
+                String cuadro = txtSalida.getText();
+                txtSalida.setText(cuadro+Metodos.generarImagen(""+Actual.getFirst())+"\n");
+                Metodos.dot="";
+                
+                cuadro = txtSalida.getText();
+                txtSalida.setText(cuadro+Metodos.tablaSiguientes(ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
+                
+            }
             
-            txtSalida.setText("Analisis realizado correctamente");
+            String cuadro = txtSalida.getText();
+            txtSalida.setText(cuadro+"Analisis realizado correctamente\n");
             txtSalida.setForeground(new Color(25, 111, 61));
-            
+            sintactico.ExpT=new LinkedList();
             //String cadena = Metodos.obtener(ST);
             //txtSalida.setText(cadena);
         } catch (Exception ex) {
-            Symbol sym = sintactico.getS();
-            txtSalida.setText("Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"");
-            txtSalida.setForeground(Color.red);
+            ex.printStackTrace();
+            //Symbol sym = sintactico.getS();
+            //txtSalida.setText("Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"");
+            //txtSalida.setForeground(Color.red);
         }
     }//GEN-LAST:event_btnAnalizarActionPerformed
 
