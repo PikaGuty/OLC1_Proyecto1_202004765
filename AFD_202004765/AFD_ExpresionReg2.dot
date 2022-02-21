@@ -1,0 +1,18 @@
+digraph finite_state_machine {
+	fontname="Helvetica,Arial,sans-serif"
+       label="ExpresionReg2: ((({digito}|{letra}).('_'|({letra}|{digito}))*).{#FIN})"	node [fontname="Helvetica,Arial,sans-serif"]
+	edge [fontname="Helvetica,Arial,sans-serif"]
+	rankdir=LR;
+	size="8,5";
+       node [shape = doublecircle]; S0 S3;
+	node [shape = circle];S0 -> S1 [label = "{digito}"];
+S0 -> S1 [label = "{letra}"];
+S1 -> S2 [label = "'_'"];
+S1 -> S2 [label = "{letra}"];
+S1 -> S2 [label = "{digito}"];
+S1 -> S3 [label = "{#FIN}"];
+S2 -> S2 [label = "'_'"];
+S2 -> S2 [label = "{letra}"];
+S2 -> S2 [label = "{digito}"];
+S2 -> S3 [label = "{#FIN}"];
+}

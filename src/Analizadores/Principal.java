@@ -247,6 +247,8 @@ public class Principal extends javax.swing.JFrame {
             //System.out.println(ER);
             for (int i = 0; i < ER.size(); i++) {
                 Metodos.TablaSig = new LinkedList();
+                transiciones.Transiciones = new LinkedList();
+                transiciones.Encabezados = new LinkedList();
                 LinkedList Actual = (LinkedList) ERR.get(i);
                 Metodos.Nodo ac = (Metodos.Nodo) Actual.getLast();
                 //System.out.println("CONTENIDO "+Actual.getFirst()+Actual.get(1));
@@ -268,6 +270,11 @@ public class Principal extends javax.swing.JFrame {
                 cuadro = txtSalida.getText();
                 txtSalida.setText(cuadro+Metodos.tablaSiguientes(ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
                 
+                cuadro = txtSalida.getText();
+                txtSalida.setText(cuadro+transiciones.tablaEstados(Metodos.TablaSig, ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
+                
+                cuadro = txtSalida.getText();
+                txtSalida.setText(cuadro+transiciones.Automata( ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
             }
             
             String cuadro = txtSalida.getText();

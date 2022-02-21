@@ -83,7 +83,7 @@ public class Metodos {
                 if (Exp.length>1){
                     cadena=analizar(Exp);
                 }else if(Exp.length==1){
-                    cadena=".,"+cadena+",{FIN}";
+                    cadena=".,"+cadena+",{#FIN}";
                     Exp=cadena.split(",");
                     
                     cadena=analizar(Exp);
@@ -234,9 +234,9 @@ public class Metodos {
                     }
                 }
             }
-            if("{FIN}".equals(n.contenido)){
+            if("{#FIN}".equals(n.contenido)){
                 for (int i = 0; i < TablaSig.size(); i++) {
-                    if("{FIN}".equals(TablaSig.get(i).contenidoH)){
+                    if("{#FIN}".equals(TablaSig.get(i).contenidoH)){
                         TablaSig.get(i).listaSig.add("-");
                     }                   
                 }
@@ -266,6 +266,7 @@ public class Metodos {
                     "<TD border=\"3\"  bgcolor=\"gold\">"+TablaSig.get(i).identificadorH+"</TD>\n" +
                     "<TD border=\"3\"  colspan=\"2\" bgcolor=\"gold\">";
             for (int j = 0; j < TablaSig.get(i).listaSig.size(); j++) {
+                //System.out.println("TIENE ESTO EL "+TablaSig.get(i).identificadorH+"  "+TablaSig.get(i).listaSig);
                 if(primero){
                     tabla+=TablaSig.get(i).listaSig.get(j);
                     primero=false;
