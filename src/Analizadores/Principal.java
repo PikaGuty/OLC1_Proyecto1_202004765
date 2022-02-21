@@ -271,10 +271,11 @@ public class Principal extends javax.swing.JFrame {
                 txtSalida.setText(cuadro+Metodos.tablaSiguientes(ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
                 
                 cuadro = txtSalida.getText();
-                txtSalida.setText(cuadro+transiciones.tablaEstados(Metodos.TablaSig, ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
+                txtSalida.setText(cuadro+transicions.tablaEstados(Metodos.TablaSig, ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
                 
                 cuadro = txtSalida.getText();
-                txtSalida.setText(cuadro+transiciones.Automata( ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
+                txtSalida.setText(cuadro+transicions.Automata( ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
+                
             }
             
             String cuadro = txtSalida.getText();
