@@ -2,33 +2,29 @@ digraph G {
   label=<
  <TABLE border="5" cellspacing="4" cellpadding="10" style="rounded" bgcolor="green" gradientangle="315">
 <TR>
-<TD border="3"  colspan="4" bgcolor="orange">ExpReg1: ((({digito}|{letra}).("_"|({letra}|{digito}))+).{#FIN})</TD>
+<TD border="3"  colspan="4" bgcolor="orange">ExpReg1: (({letra}.(("_"|({letra}|{digito}))+)).{#FIN})</TD>
 </TR><TR>
 <TD border="3"  colspan="2" bgcolor="orange">Hoja</TD>
 <TD border="3"  colspan="2" bgcolor="orange">Siguientes</TD>
 </TR><TR>
-<TD border="3"  bgcolor="gold">{digito}</TD>
-<TD border="3"  bgcolor="gold">1</TD>
-<TD border="3"  colspan="2" bgcolor="gold">3,4,5</TD>
-</TR><TR>
 <TD border="3"  bgcolor="gold">{letra}</TD>
-<TD border="3"  bgcolor="gold">2</TD>
-<TD border="3"  colspan="2" bgcolor="gold">3,4,5</TD>
+<TD border="3"  bgcolor="gold">1</TD>
+<TD border="3"  colspan="2" bgcolor="gold">2,3,4</TD>
 </TR><TR>
 <TD border="3"  bgcolor="gold">"_"</TD>
-<TD border="3"  bgcolor="gold">3</TD>
-<TD border="3"  colspan="2" bgcolor="gold">3,4,5,6</TD>
+<TD border="3"  bgcolor="gold">2</TD>
+<TD border="3"  colspan="2" bgcolor="gold">2,3,4,5</TD>
 </TR><TR>
 <TD border="3"  bgcolor="gold">{letra}</TD>
-<TD border="3"  bgcolor="gold">4</TD>
-<TD border="3"  colspan="2" bgcolor="gold">3,4,5,6</TD>
+<TD border="3"  bgcolor="gold">3</TD>
+<TD border="3"  colspan="2" bgcolor="gold">2,3,4,5</TD>
 </TR><TR>
 <TD border="3"  bgcolor="gold">{digito}</TD>
-<TD border="3"  bgcolor="gold">5</TD>
-<TD border="3"  colspan="2" bgcolor="gold">3,4,5,6</TD>
+<TD border="3"  bgcolor="gold">4</TD>
+<TD border="3"  colspan="2" bgcolor="gold">2,3,4,5</TD>
 </TR><TR>
 <TD border="3"  bgcolor="gold">{#FIN}</TD>
-<TD border="3"  bgcolor="gold">6</TD>
+<TD border="3"  bgcolor="gold">5</TD>
 <TD border="3"  colspan="2" bgcolor="gold">-</TD>
 </TR></TABLE>>
 

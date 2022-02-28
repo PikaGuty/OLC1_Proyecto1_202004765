@@ -1,6 +1,6 @@
 digraph structs {
     node [shape=record];
-    label = "decimal: ((({digito}+.'.').{digito}+).{#FIN})";
+    label = "decimal: (((({digito}+).'.').({digito}+)).{#FIN})";
     Nodo9 [label="{ N |{[1]|<here> . |[4]}| }" color="white"];
     Nodo7 [label="{ N |{[1]|<here> . |[3]}| }" color="white"];
     Nodo4 [label="{ N |{[1]|<here> . |[2]}| }" color="white"];

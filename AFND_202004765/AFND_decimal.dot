@@ -1,0 +1,29 @@
+digraph structs {
+    node [shape=circle];
+    rankdir=LR;    label = "(((({digito}+).'.').({digito}+)).{#FIN})";
+    NodoS0 [label="S0" ];
+    NodoS1 [label="S1" ];
+    NodoS2 [label="S2" ];
+    NodoS3 [label="S3" ];
+    NodoS4 [label="S4" ];
+    NodoS5 [label="S5" ];
+    NodoS6 [label="S6" ];
+    NodoS7 [label="S7" ];
+    NodoS11 [label="S11" ];
+    NodoS9 [label="S9" ];
+    NodoS19 [label="S19" ];
+    NodoS17 [label="S17" ];
+    NodoS0 -> NodoS2[label="Epsilon" color="orange"];
+    NodoS2 -> NodoS3[label="{digito}" color="orange"];
+    NodoS3 -> NodoS1[label="Epsilon" color="orange"];
+    NodoS3 -> NodoS2[label="Epsilon" color="orange"];
+    NodoS4 -> NodoS6[label="Epsilon" color="orange"];
+    NodoS6 -> NodoS7[label="{digito}" color="orange"];
+    NodoS7 -> NodoS5[label="Epsilon" color="orange"];
+    NodoS7 -> NodoS6[label="Epsilon" color="orange"];
+    NodoS1 -> NodoS11[label="Epsilon" color="orange"];
+    NodoS11 -> NodoS9[label="'.'" color="orange"];
+    NodoS9 -> NodoS4[label="Epsilon" color="orange"];
+    NodoS5 -> NodoS19[label="Epsilon" color="orange"];
+    NodoS19 -> NodoS17[label="{#FIN}" color="orange"];
+}

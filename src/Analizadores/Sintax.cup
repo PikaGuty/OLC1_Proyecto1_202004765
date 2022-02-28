@@ -16,37 +16,67 @@ parser code
     public static LinkedList ExpR = new LinkedList();
     public static LinkedList ExpS = new LinkedList();
     public static LinkedList ExpT = new LinkedList();
+
     
     public void syntax_error(Symbol s){
-        this.s = s;
+        Principal.NotErrorL("Error R de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
     }
 
-    public Symbol getS(){
-        return this.s;
-}
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        Principal.NotErrorL("Error NR de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+    }
 :};
 
 terminal PTCOMA, Reservadas, SEPARADOR, STRING, LLAVEI,LLAVEF, DPUNTOS, FLECHA, Identificador, TILD, ERROR, LETRAU, DIGITU,SIMBOLO,
-    PUNTO, ASTERISCO, BARRA, PARENTESISI, PARENTESISF, CORCHETEI, CORCHETEF,COMA,INTERROG,MAS; 
-non terminal INICIO, decConjuntos, tConjuntos,vConj, vConjL, vConjD, Probador, ExpReg, ER, CONTENIDO, CABECERA, PIE;
+    PUNTO, ASTERISCO, BARRA, PARENTESISI, PARENTESISF, CORCHETEI, CORCHETEF,COMA,INTERROG,MAS,COMDOB; 
+non terminal INICIO, decConjuntos, tConjuntos,vConj, vConjL, vConjD, Probador, ExpReg, ER, CONTENIDO, CABECERA, PIE, CARACT;
 
 start with INICIO;
 
 INICIO ::=LLAVEI CONTENIDO LLAVEF;
 
-CONTENIDO ::= CABECERA SEPARADOR PIE;
-CABECERA ::= decConjuntos CABECERA | ExpReg CABECERA | decConjuntos | ExpReg;
-PIE ::= Probador PIE | Probador;
+CONTENIDO ::= CABECERA SEPARADOR PIE ;
+CABECERA ::= decConjuntos CABECERA | ExpReg CABECERA | decConjuntos | ExpReg| error PTCOMA | error LLAVEF;
+PIE ::= Probador PIE | Probador| error PTCOMA | error LLAVEF;
 
-decConjuntos ::= Reservadas:r DPUNTOS Identificador FLECHA tConjuntos:a PTCOMA     {: RESULT = a; Conjunto.add(r); Conjunto.add(a); Conjuntos.add(Conjunto); Conjunto= new LinkedList(); :}; 
-tConjuntos ::= LETRAU:a  TILD LETRAU:c {: RESULT=a+"-"+c; :}| DIGITU:a TILD DIGITU:c {: RESULT=a+"-"+c; :}| vConj {:  RESULT=caracteresI; caracteresI = new LinkedList(); :};
+decConjuntos ::= Reservadas DPUNTOS Identificador:r FLECHA tConjuntos:a PTCOMA     {: RESULT = a; Conjunto.add(r); Conjunto.add(a); Conjuntos.add(Conjunto); Conjunto= new LinkedList(); :}; 
+tConjuntos ::= LETRAU:a  TILD LETRAU:c {: RESULT=a+"-"+c; :}| DIGITU:a TILD DIGITU:c {: RESULT=a+"-"+c; :}| vConj {:  RESULT=caracteresI; caracteresI = new LinkedList(); :}| CARACT:a  TILD CARACT:c {: RESULT=a+"-"+c; :};
 
 vConj ::= LETRAU:a {: caracteresI.add(a+""); :} | LETRAU:a vConjL {: caracteresI.add(a+""); :} | DIGITU:a {: caracteresI.add(a+""); :} | DIGITU:a vConjD {: caracteresI.add(a+""); :};
 vConjL ::= COMA LETRAU:a vConjL  {: caracteresI.add(a+""); :} | COMA LETRAU:a {: caracteresI.add(a+""); :};
 vConjD ::= COMA DIGITU:a vConjD {: caracteresI.add(a+""); :} | COMA DIGITU:a {: caracteresI.add(a+""); :};
 
+CARACT ::= PTCOMA:a {: RESULT=a; :} | LLAVEI:a {: RESULT=a; :} | LLAVEF:a {: RESULT=a; :} | PARENTESISI:a {: RESULT=a; :} | PARENTESISF:a {: RESULT=a; :} | CORCHETEI:a {: RESULT=a; :} | CORCHETEF:a {: RESULT=a; :} | DPUNTOS:a {: RESULT=a; :} | PUNTO:a {: RESULT=a; :} | COMA:a {: RESULT=a; :} | ASTERISCO:a {: RESULT=a; :} | BARRA:a {: RESULT=a; :} | MAS:a {: RESULT=a; :} | INTERROG:a {: RESULT=a; :} | COMDOB:a {: RESULT=a; :} | SIMBOLO:a {: RESULT=a; :};
+
 Probador ::= Identificador:r DPUNTOS STRING:a PTCOMA {: RESULT = a; Probar.add(r); Probar.add(a); EProbar.add(Probar); Probar= new LinkedList();  :}; 
 
 ExpReg ::= Identificador:r FLECHA ER:a PTCOMA {: RESULT = a; ExpS.add(r); ExpS.add(ExpR); ExpT.add(ExpS); ExpR= new LinkedList(); ExpS= new LinkedList(); :};
-ER ::= LLAVEI:a Identificador:b LLAVEF:c {: ExpR.add(a+""+b+""+c); :}| ASTERISCO:a {: ExpR.add(a+""); :}| MAS:a {: ExpR.add(a+""); :} | INTERROG:a {: ExpR.add(a+""); :} | BARRA:a {: ExpR.add(a+""); :} | PUNTO:a {: ExpR.add(a+""); :} | STRING:a {: ExpR.add(a+""); :} | CORCHETEI:a tConjuntos:b CORCHETEF:c {: ExpR.add(a+""+b+""+c); :} | LLAVEI:a Identificador:b LLAVEF:c  {: ExpR.add(a+""+b+""+c); :} ER| ASTERISCO:a {: ExpR.add(a+""); :} ER | MAS:a {: ExpR.add(a+""); :} ER | INTERROG:a {: ExpR.add(a+""); :} ER | BARRA:a {: ExpR.add(a+""); :} ER | PUNTO:a {: ExpR.add(a+""); :} ER | STRING:a {: ExpR.add(a+""); :} ER | CORCHETEI:a tConjuntos:b CORCHETEF:c {: ExpR.add(a+""+b+""+c); :} ER;
+ER ::= LLAVEI:a Identificador:b LLAVEF:c {: 
+        boolean boo = false;
+        for (int i = 0; i < Sintax.Conjuntos.size(); i++) {
+            LinkedList act = (LinkedList) Sintax.Conjuntos.get(i);
+            String identificador = act.getFirst().toString();
+            if(identificador.equals(b.toString())){
+                boo = true;
+            }
+        } 
+        if(boo){ 
+            ExpR.add(a+""+b+""+c);
+        }else{
+            Principal.noExisteConj(b.toString());
+            break;
+        } :}| ASTERISCO:a {: ExpR.add(a+""); :}| MAS:a {: ExpR.add(a+""); :} | INTERROG:a {: ExpR.add(a+""); :} | BARRA:a {: ExpR.add(a+""); :} | PUNTO:a {: ExpR.add(a+""); :} | STRING:a {: ExpR.add(a+""); :} | CORCHETEI:a tConjuntos:b CORCHETEF:c {: ExpR.add(a+""+b+""+c); :} | LLAVEI:a Identificador:b LLAVEF:c  {: boolean boo = false;
+        for (int i = 0; i < Sintax.Conjuntos.size(); i++) {
+            LinkedList act = (LinkedList) Sintax.Conjuntos.get(i);
+            String identificador = act.getFirst().toString();
+            if(identificador.equals(b.toString())){
+                boo = true;
+            }
+        } 
+        if(boo){ 
+            ExpR.add(a+""+b+""+c);
+        }else{
+            Principal.noExisteConj(b.toString());
+            break;
+        } :} ER| ASTERISCO:a {: ExpR.add(a+""); :} ER | MAS:a {: ExpR.add(a+""); :} ER | INTERROG:a {: ExpR.add(a+""); :} ER | BARRA:a {: ExpR.add(a+""); :} ER | PUNTO:a {: ExpR.add(a+""); :} ER | STRING:a {: ExpR.add(a+""); :} ER | CORCHETEI:a tConjuntos:b CORCHETEF:c {: ExpR.add(a+""+b+""+c); :} ER;
 

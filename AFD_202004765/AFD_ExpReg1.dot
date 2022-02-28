@@ -1,12 +1,11 @@
 digraph finite_state_machine {
 	fontname="Helvetica,Arial,sans-serif"
-       label="ExpReg1: ((({digito}|{letra}).('_'|({letra}|{digito}))+).{#FIN})"	node [fontname="Helvetica,Arial,sans-serif"]
+       label="ExpReg1: (({letra}.(('_'|({letra}|{digito}))+)).{#FIN})"	node [fontname="Helvetica,Arial,sans-serif"]
 	edge [fontname="Helvetica,Arial,sans-serif"]
 	rankdir=LR;
 	size="8,5";
        node [shape = doublecircle]; S3;
-	node [shape = circle];S0 -> S1 [label = "{digito}"];
-S0 -> S1 [label = "{letra}"];
+	node [shape = circle];S0 -> S1 [label = "{letra}"];
 S1 -> S2 [label = "'_'"];
 S1 -> S2 [label = "{letra}"];
 S1 -> S2 [label = "{digito}"];

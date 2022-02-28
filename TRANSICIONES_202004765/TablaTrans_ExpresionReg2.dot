@@ -2,7 +2,7 @@ digraph G {
 label=<
 <TABLE border="5" cellspacing="4" cellpadding="10" style="rounded" bgcolor="green" gradientangle="315">
 <TR>
-<TD border="3"  colspan="5" bgcolor="orange">ExpresionReg2: (({letra}*.("_"|({letra}|{digito}))*).{#FIN})</TD>
+<TD border="3"  colspan="5" bgcolor="orange">ExpresionReg2: (({letra}.(("_"|({letra}|{digito}))*)).{#FIN})</TD>
 </TR>
 <TR>
 <TD border="3"  rowspan="2" bgcolor="orange">Estado</TD>
@@ -15,26 +15,19 @@ label=<
 <TD border="3" bgcolor="orange">{#FIN}</TD>
 </TR>
 <TR>
-<TD border="3"  bgcolor="gold">S0</TD><TD border="3" bgcolor="gold">-</TD>
+<TD border="3"  bgcolor="gold">S0</TD><TD border="3" bgcolor="gold">S1</TD>
 <TD border="3" bgcolor="gold">-</TD>
 <TD border="3" bgcolor="gold">-</TD>
 <TD border="3" bgcolor="gold">-</TD>
 </TR>
 <TR>
 <TD border="3"  bgcolor="gold">S1</TD><TD border="3" bgcolor="gold">S1</TD>
+<TD border="3" bgcolor="gold">S1</TD>
+<TD border="3" bgcolor="gold">S1</TD>
 <TD border="3" bgcolor="gold">S2</TD>
-<TD border="3" bgcolor="gold">S2</TD>
-<TD border="3" bgcolor="gold">S2</TD>
-<TD border="3" bgcolor="gold">S3</TD>
 </TR>
 <TR>
-<TD border="3"  bgcolor="gold">S2</TD><TD border="3" bgcolor="gold">S2</TD>
-<TD border="3" bgcolor="gold">S2</TD>
-<TD border="3" bgcolor="gold">S2</TD>
-<TD border="3" bgcolor="gold">S3</TD>
-</TR>
-<TR>
-<TD border="3"  bgcolor="gold">*S3</TD><TD border="3" bgcolor="gold">-</TD>
+<TD border="3"  bgcolor="gold">*S2</TD><TD border="3" bgcolor="gold">-</TD>
 <TD border="3" bgcolor="gold">-</TD>
 <TD border="3" bgcolor="gold">-</TD>
 <TD border="3" bgcolor="gold">-</TD>

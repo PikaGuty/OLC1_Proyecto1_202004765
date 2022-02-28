@@ -1,0 +1,21 @@
+digraph structs {
+    node [shape=record];
+    label = "Raro: (((({vocales}.({especial}?)).'\n')+).{#FIN})";
+    Nodo9 [label="{ N |{[1]|<here> . |[4]}| }" color="white"];
+    Nodo7 [label="{ N |{[1]|<here> + |[3]}| }" color="white"];
+    Nodo6 [label="{ N |{[1]|<here> . |[3]}| }" color="white"];
+    Nodo4 [label="{ N |{[1]|<here> . |[1, 2]}| }" color="white"];
+    Nodo1 [label="{ N |{[1]|<here> vocales |[1]}| 1}" color="white"];
+    Nodo3 [label="{ A |{[2]|<here> ? |[2]}| }" color="white"];
+    Nodo2 [label="{ N |{[2]|<here> especial |[2]}| 2}" color="white"];
+    Nodo5 [label="{ N |{[3]|<here> '\n' |[3]}| 3}" color="white"];
+    Nodo8 [label="{ N |{[4]|<here> #FIN |[4]}| 4}" color="white"];
+    Nodo9:here -> Nodo7:here [color="orange"];
+    Nodo9:here -> Nodo8:here [color="orange"];
+    Nodo7:here -> Nodo6:here [color="orange"];
+    Nodo6:here -> Nodo4:here [color="orange"];
+    Nodo6:here -> Nodo5:here [color="orange"];
+    Nodo4:here -> Nodo1:here [color="orange"];
+    Nodo4:here -> Nodo3:here [color="orange"];
+    Nodo3:here -> Nodo2:here [color="orange"];
+}

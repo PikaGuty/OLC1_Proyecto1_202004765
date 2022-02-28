@@ -54,6 +54,11 @@ public class Metodos {
 
     public static LinkedList ordenarExpresionRegular(LinkedList ER){
         for (int i = 0; i < ER.size(); i++) {
+            Thompson.contador=0;
+            Thompson.grafos = new LinkedList();
+            Thompson.listaNodos = new LinkedList();
+            Thompson.listaGrafo = new LinkedList();
+            
             arbolitos = new LinkedList();
             String Expresion="";
             LinkedList Actual = (LinkedList) ER.get(i);
@@ -61,6 +66,7 @@ public class Metodos {
             LinkedList puntero = (LinkedList) Actual.getLast();
             boolean primero=true;
             while(true){
+                //System.out.println("Expresion "+Expresion);
                 try{
                     if (primero){
                         Expresion += puntero.getFirst();
@@ -79,7 +85,8 @@ public class Metodos {
             boolean Final = true;
             while(true){
                 Exp=cadena.split(",");
-                //System.out.println(cadena);
+                
+                System.out.println(cadena);
                 if (Exp.length>1){
                     cadena=analizar(Exp);
                 }else if(Exp.length==1){
@@ -118,6 +125,8 @@ public class Metodos {
             Actual.removeLast();
             Actual.add(cadena);
             Actual.add(arbolitos.getFirst().getArbol());
+            String nombre = ""+Actual.getFirst();
+            Thompson.grafica(Thompson.grafos.get(0).primero, cadena,nombre);
         }
         return ER;
     }
@@ -549,25 +558,29 @@ public class Metodos {
                             Nodo ni = new Nodo(""+Exp[i-1]);
                             Nodo nd = new Nodo(""+Exp[i]);
                             
-                            if((""+Exp[i-1]).contains("(")||(""+Exp[i-1]).contains("+")||(""+Exp[i-1]).contains("*")){
-                                for (int j = 0; j < arbolitos.size(); j++) {
-                                    if (Exp[i-1].equals(arbolitos.get(j).cadena)){
-                                        n.izquierda=arbolitos.get(j).arbol;
-                                        arbolitos.remove(j);
-                                    }
+                            Thompson.grafica1(Exp[i-1],Exp[i-2],Exp[i]);
+                            
+                            boolean exist = false;
+                            for (int j = 0; j < arbolitos.size(); j++) {
+                                if (Exp[i-1].equals(arbolitos.get(j).cadena)){
+                                    n.izquierda=arbolitos.get(j).arbol;
+                                    arbolitos.remove(j);
+                                    exist = true;
                                 }
-                            }else{
+                            }
+                            if(!exist){
                                 n.izquierda=ni;
                             }
 
-                            if((""+Exp[i]).contains("(")||(""+Exp[i]).contains("+")||(""+Exp[i]).contains("*")){
-                                for (int j = 0; j < arbolitos.size(); j++) {
-                                    if (Exp[i].equals(arbolitos.get(j).cadena)){
-                                        n.derecha=arbolitos.get(j).arbol;
-                                        arbolitos.remove(j);
-                                    }
+                            boolean exist2 = false;
+                            for (int j = 0; j < arbolitos.size(); j++) {
+                                if (Exp[i].equals(arbolitos.get(j).cadena)){
+                                    n.derecha=arbolitos.get(j).arbol;
+                                    arbolitos.remove(j);
+                                    exist2=true;
                                 }
-                            }else{
+                            }
+                            if(!exist2){
                                 n.derecha=nd;
                             }
                             
@@ -580,25 +593,29 @@ public class Metodos {
                             Nodo ni = new Nodo(""+Exp[i-1]);
                             Nodo nd = new Nodo(""+Exp[i]);
                             
-                            if((""+Exp[i-1]).contains("(")||(""+Exp[i-1]).contains("+")||(""+Exp[i-1]).contains("*")){
-                                for (int j = 0; j < arbolitos.size(); j++) {
-                                    if (Exp[i-1].equals(arbolitos.get(j).cadena)){
-                                        n.izquierda=arbolitos.get(j).arbol;
-                                        arbolitos.remove(j);
-                                    }
+                            Thompson.grafica1(Exp[i-1],Exp[i-2],Exp[i]);
+                            
+                            boolean exist = false;
+                            for (int j = 0; j < arbolitos.size(); j++) {
+                                if (Exp[i-1].equals(arbolitos.get(j).cadena)){
+                                    n.izquierda=arbolitos.get(j).arbol;
+                                    arbolitos.remove(j);
+                                    exist = true;
                                 }
-                            }else{
+                            }
+                            if(!exist){
                                 n.izquierda=ni;
                             }
 
-                            if((""+Exp[i]).contains("(")||(""+Exp[i]).contains("+")||(""+Exp[i]).contains("*")){
-                                for (int j = 0; j < arbolitos.size(); j++) {
-                                    if (Exp[i].equals(arbolitos.get(j).cadena)){
-                                        n.derecha=arbolitos.get(j).arbol;
-                                        arbolitos.remove(j);
-                                    }
+                            boolean exist2 = false;
+                            for (int j = 0; j < arbolitos.size(); j++) {
+                                if (Exp[i].equals(arbolitos.get(j).cadena)){
+                                    n.derecha=arbolitos.get(j).arbol;
+                                    arbolitos.remove(j);
+                                    exist2 = true;
                                 }
-                            }else{
+                            }
+                            if(!exist2){
                                 n.derecha=nd;
                             }
                             
@@ -627,39 +644,43 @@ public class Metodos {
                 i++;
                 if(!"|".equals(Exp[i])&&!".".equals(Exp[i])&&!"*".equals(Exp[i])&&!"?".equals(Exp[i])&&!"+".equals(Exp[i])){
                     if (primero){
-                        cadena += Exp[i]+Exp[i-1];
+                        cadena += "("+Exp[i]+Exp[i-1]+")";
                         Nodo n = new Nodo(""+Exp[i-1]);
                         Nodo ni = new Nodo(""+Exp[i]);
-
-                        if((""+Exp[i]).contains("(")||(""+Exp[i]).contains("+")||(""+Exp[i]).contains("*")){
-                            for (int j = 0; j < arbolitos.size(); j++) {
-                                if (Exp[i].equals(arbolitos.get(j).cadena)){
-                                    n.izquierda=arbolitos.get(j).arbol;
-                                    arbolitos.remove(j);
-                                }
+                        
+                        Thompson.grafica2(Exp[i],Exp[i-1]);
+                        
+                        boolean exist =false;
+                        for (int j = 0; j < arbolitos.size(); j++) {
+                            if (Exp[i].equals(arbolitos.get(j).cadena)){
+                                n.izquierda=arbolitos.get(j).arbol;
+                                arbolitos.remove(j);
+                                exist = true;
                             }
-                        }else{
+                        }
+                        if(!exist){
                             n.izquierda=ni;
                         }
-                        arbolitos.add(new ObjAgrupado(n,Exp[i]+Exp[i-1]+""));
+                        arbolitos.add(new ObjAgrupado(n,"("+Exp[i]+Exp[i-1]+")"));
                             
                         primero = false;
                     }else{
-                        cadena += ","+Exp[i]+Exp[i-1];
+                        cadena += ",("+Exp[i]+Exp[i-1]+")";
                         Nodo n = new Nodo(""+Exp[i-1]);
                         Nodo ni = new Nodo(""+Exp[i]);
-
-                        if((""+Exp[i]).contains("(")||(""+Exp[i]).contains("+")||(""+Exp[i]).contains("*")){
-                            for (int j = 0; j < arbolitos.size(); j++) {
-                                if (Exp[i].equals(arbolitos.get(j).cadena)){
-                                    n.izquierda=arbolitos.get(j).arbol;
-                                    arbolitos.remove(j);
-                                }
+                        Thompson.grafica2(Exp[i],Exp[i-1]);
+                        boolean exist = false;
+                        for (int j = 0; j < arbolitos.size(); j++) {
+                            if (Exp[i].equals(arbolitos.get(j).cadena)){
+                                n.izquierda=arbolitos.get(j).arbol;
+                                arbolitos.remove(j);
+                                exist = true;
                             }
-                        }else{
+                        }
+                        if(!exist){
                             n.izquierda=ni;
                         }
-                        arbolitos.add(new ObjAgrupado(n,Exp[i]+Exp[i-1]+""));
+                        arbolitos.add(new ObjAgrupado(n,"("+Exp[i]+Exp[i-1]+")"));
                     }
                     
                 }else{

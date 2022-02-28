@@ -15,7 +15,7 @@ L=[a-zA-Z_]+
 LU=[a-zA-Z]
 D=[0-9]+
 DU=[0-9]
-S=[ |"!"|"\""|"#"|"$"|"%"|"&"|"\'"|"("|")"|"*"|"+"|","|"-"|"."|"/"|":"|";"|"<"|"="|">"|"?"|"@"|"["|"\\"|"]"|"^"|"_"|"`"|"{"|"|"|"}"]
+S=["_"|"-"|"/"|"."|","|"!"|"@"|"#"|"$"|"%"|"^"|"&"|"*"|"|"|"("|")"|"="|"+"|"\\"|":"|";"|"<"|">"|"?"|"`"|"{"|"}"|"["|"]"|"'"]
 espacio=[ \t\r\n]+
 
 
@@ -33,8 +33,8 @@ espacio=[ \t\r\n]+
 
 CONJ                                    {return new Symbol(sym.Reservadas, yychar, yyline, yytext());}  
 "<!"(.*|\n)*"!>"                        {/*Ignore*/}                                                                          //COMENTARIOS MULTINLINEA
-"%%"(\n)+"%%"                           {return new Symbol(sym.SEPARADOR, yychar, yyline, yytext());}                         //SEPARADOR
-((\").*(\"))|((\').*(\'))               {return new Symbol(sym.STRING, yychar, yyline, yytext());}                            //LEXEMA
+"%%"(\n)+"%%"|"%%"                      {return new Symbol(sym.SEPARADOR, yychar, yyline, yytext());}                         //SEPARADOR
+
 {espacio}                               {/*Ignore*/}                                                                          //IGNORA ESPACIOS
 "//".*                                  {/*Ignore*/}                                                                          //COMENTARIOS DE UNA LINEA
 "->"                                    {return new Symbol(sym.FLECHA, yychar, yyline, yytext());}                            //FLECHA
@@ -54,12 +54,15 @@ CONJ                                    {return new Symbol(sym.Reservadas, yycha
 "|"                                     {return new Symbol(sym.BARRA, yychar, yyline, yytext()); }                             //BARRA
 "+"                                     {return new Symbol(sym.MAS, yychar, yyline, yytext()); }                               //MAS
 "?"                                     {return new Symbol(sym.INTERROG, yychar, yyline, yytext()); }                          //INTERROGACION
+"\\\""                                  {return new Symbol(sym.COMDOB, yychar, yyline, yytext()); }                          //INTERROGACION
 
 {S}                                     {return new Symbol(sym.SIMBOLO, yychar, yyline, yytext());}
+\"([^\"]*)\"|\'([^\']*)\'               {return new Symbol(sym.STRING, yychar, yyline, yytext());}   
 {LU}                                    {return new Symbol(sym.LETRAU, yychar, yyline, yytext());}                            //Letra Unica
 {DU}                                    {return new Symbol(sym.DIGITU, yychar, yyline, yytext());}                            //Digito Unica
 {L}({L}|{D})*                           {return new Symbol(sym.Identificador, yychar, yyline, yytext());}                     //IDENTIFICADOR
 
- . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}
+ . {String errLex = "Error léxico : '"+yytext()+"' en la línea: "+(yyline+1)+" y columna: "+(yycolumn+1);
+        Principal.NotErrorL(errLex);}
 
 

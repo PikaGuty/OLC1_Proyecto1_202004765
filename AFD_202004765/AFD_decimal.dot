@@ -1,6 +1,6 @@
 digraph finite_state_machine {
 	fontname="Helvetica,Arial,sans-serif"
-       label="decimal: ((({digito}+.'.').{digito}+).{#FIN})"	node [fontname="Helvetica,Arial,sans-serif"]
+       label="decimal: (((({digito}+).'.').({digito}+)).{#FIN})"	node [fontname="Helvetica,Arial,sans-serif"]
 	edge [fontname="Helvetica,Arial,sans-serif"]
 	rankdir=LR;
 	size="8,5";

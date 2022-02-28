@@ -226,6 +226,14 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    public static void NotErrorL(String Error){
+        System.out.println("ERORRR "+Error);
+    }
+    
+    public static void noExisteConj(String Error){
+        System.out.println("NO EXISTE EL CONJUNTO: "+Error);
+    }
+    
     private void btnAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarActionPerformed
         txtSalida.setText("");        
         //String ST = txtArchivo.getText();
@@ -242,9 +250,21 @@ public class Principal extends javax.swing.JFrame {
             //LinkedList Pruebas = sintactico.EProbar;
             //System.out.println(Pruebas);
             
+            String cuadro = txtSalida.getText();
+            txtSalida.setText(cuadro+"Analisis realizado correctamente\n");
+            txtSalida.setForeground(new Color(25, 111, 61));
+            
             ER = sintactico.ExpT;
+            //System.out.println("EXPRESION AAAA "+ER);
             LinkedList ERR=Metodos.ordenarExpresionRegular(ER);
-            //System.out.println(ER);
+            
+            LinkedList CONJ = sintactico.Conjuntos;
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            for (int i = 0; i < CONJ.size(); i++) {
+                LinkedList act = (LinkedList) CONJ.get(i);
+                System.out.println(act.getFirst());
+            }
+            
             for (int i = 0; i < ER.size(); i++) {
                 Metodos.TablaSig = new LinkedList();
                 transiciones.Transiciones = new LinkedList();
@@ -263,7 +283,7 @@ public class Principal extends javax.swing.JFrame {
                 Metodos.grafica(ac,""+Actual.getFirst()+": "+Actual.get(1));
                 //Metodos.recorrerArbolito(ac);
                 //System.out.println(Metodos.dot);
-                String cuadro = txtSalida.getText();
+                cuadro = txtSalida.getText();
                 txtSalida.setText(cuadro+Metodos.generarImagen(""+Actual.getFirst())+"\n");
                 Metodos.dot="";
                 
@@ -278,9 +298,6 @@ public class Principal extends javax.swing.JFrame {
                 
             }
             
-            String cuadro = txtSalida.getText();
-            txtSalida.setText(cuadro+"Analisis realizado correctamente\n");
-            txtSalida.setForeground(new Color(25, 111, 61));
             sintactico.ExpT=new LinkedList();
             //String cadena = Metodos.obtener(ST);
             //txtSalida.setText(cadena);
