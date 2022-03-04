@@ -5,7 +5,8 @@ digraph finite_state_machine {
 	rankdir=LR;
 	size="8,5";
        node [shape = doublecircle]; S4;
-	node [shape = circle];S1 -> S1 [label = "{digito}"];
+	node [shape = circle];iS0 -> S1 [label = "{digito}"];
+S1 -> S1 [label = "{digito}"];
 S1 -> S2 [label = "'.'"];
 S2 -> S3 [label = "{digito}"];
 S3 -> S3 [label = "{digito}"];

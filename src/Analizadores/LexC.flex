@@ -62,7 +62,6 @@ CONJ                                    {return new Symbol(sym.Reservadas, yycha
 {DU}                                    {return new Symbol(sym.DIGITU, yychar, yyline, yytext());}                            //Digito Unica
 {L}({L}|{D})*                           {return new Symbol(sym.Identificador, yychar, yyline, yytext());}                     //IDENTIFICADOR
 
- . {String errLex = "Error léxico : '"+yytext()+"' en la línea: "+(yyline+1)+" y columna: "+(yycolumn+1);
-        Principal.NotErrorL(errLex);}
+ . {Principal.NotErrorL("Léxico",yytext(), (yyline+1),(yycolumn+1));}
 
 

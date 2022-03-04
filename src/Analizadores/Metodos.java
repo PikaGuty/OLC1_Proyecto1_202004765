@@ -18,6 +18,8 @@ public class Metodos {
     public static String dot="";
     public static int con = 0;
     public static int noNodo = 0;
+    public static boolean primeros=true;
+    public static Nodo anterior=null;
     public static String obtener(String texto) throws IOException{
         String sec="";
         try{
@@ -55,6 +57,7 @@ public class Metodos {
     public static LinkedList ordenarExpresionRegular(LinkedList ER){
         for (int i = 0; i < ER.size(); i++) {
             Thompson.contador=0;
+            primeros=true;
             Thompson.grafos = new LinkedList();
             Thompson.listaNodos = new LinkedList();
             Thompson.listaGrafo = new LinkedList();
@@ -108,6 +111,8 @@ public class Metodos {
             }
             //System.out.println(cadena);
             recorrerArbolito(arbolitos.getFirst().getArbol());
+            anterior=null;
+            identificarPrimeros(arbolitos.getFirst().getArbol(),null);
             //graficarArbolito(arbolitos.getFirst().getArbol());
             //System.out.println("DOT");
             //System.out.println(dot);
@@ -359,7 +364,7 @@ public class Metodos {
             if(n.izquierda==null&&n.derecha==null){
                 n.identificador=con;
                 con++;
-                TablaSig.add(new TSig(n.contenido,n.identificador));
+                TablaSig.add(new TSig(n.contenido,n.identificador,n.primero));
             }
         }
     }
@@ -475,14 +480,34 @@ public class Metodos {
         }
     }
     
+    public static void identificarPrimeros(Nodo n,Nodo ant){
+        if (n!=null){
+            identificarPrimeros(n.izquierda,n);
+            //System.out.println("CONTENIDO "+n.contenido);
+            if("+".equals(n.contenido)||"?".equals(n.contenido)||"*".equals(n.contenido)||".".equals(n.contenido)){
+                try{
+                    if(!"|".equals(ant.contenido)){
+                        primeros=false;
+                    }
+                }catch(Exception e){
+                        
+                }
+            }
+            n.primero=primeros;
+            identificarPrimeros(n.derecha,n);
+        }
+    }
+    
     public static class TSig{
         public String contenidoH;
         public int identificadorH;
         public LinkedList listaSig;
+        public boolean primero;
         
-        public TSig(String contenido, int identificador){
+        public TSig(String contenido, int identificador, boolean prim){
             contenidoH = contenido;
             identificadorH = identificador;
+            primero = prim;
             listaSig = new LinkedList();
         }
     }
@@ -494,6 +519,7 @@ public class Metodos {
         public int llave;
         public int identificador;
         public int nNodo;
+        public boolean primero;
         public String anulable;
         public LinkedList Primeros;
         public LinkedList Ultimos;
@@ -505,6 +531,7 @@ public class Metodos {
             izquierda=null;
             contenido=con;
             nNodo=0;
+            primero=false;
             Primeros=new LinkedList();
             Ultimos=new LinkedList();
             anulable = "N";

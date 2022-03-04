@@ -14,7 +14,7 @@ label=<
 <TD border="3" bgcolor="orange">{#FIN}</TD>
 </TR>
 <TR>
-<TD border="3"  bgcolor="gold">S0</TD><TD border="3" bgcolor="gold">-</TD>
+<TD border="3"  bgcolor="gold">S0</TD><TD border="3" bgcolor="gold">S1</TD>
 <TD border="3" bgcolor="gold">-</TD>
 <TD border="3" bgcolor="gold">-</TD>
 </TR>

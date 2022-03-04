@@ -34,12 +34,14 @@ public class transicions {
         public String nombreEstado;
         public LinkedList entradas;
         public LinkedList siguientes;
+        public boolean primero;
         //public LinkedList identificadores;
         public LinkedList<LEstado> ListaE;
         
-        public Estado(String nEstado, LinkedList sig){
+        public Estado(String nEstado, LinkedList sig,boolean prim){
             nombreEstado = nEstado;
             siguientes = sig;
+            primero = prim;
             entradas = new LinkedList();
             ListaE = new LinkedList();
         }
@@ -65,7 +67,7 @@ public class transicions {
                 }
             }
             if (ingresar){
-                Transiciones.add(new Estado("S"+contador,act.listaSig));
+                Transiciones.add(new Estado("S"+contador,act.listaSig,act.primero));
                 for(int i = 0; i < Transiciones.size(); i++) {
                     if(Transiciones.get(i).nombreEstado.equals("S"+contador)){
                         Transiciones.get(i).entradas.add(act.identificadorH);
@@ -89,21 +91,28 @@ public class transicions {
         }
         
         LinkedList continua = new LinkedList();
-        for(int j = 1; j < TSig.size(); j++){
+        for(int j = 0; j < TSig.size(); j++){
             boolean existe = false;
-            for(int i = 0; i < Transiciones.size(); i++) {
+            Metodos.TSig act = (Metodos.TSig) TSig.get(j);
+            System.out.println("TSIG "+act.identificadorH+""+act.contenidoH+" "+act.primero);
+            /*for(int i = 0; i < Transiciones.size(); i++) {
+                //System.out.println(Transiciones.get(i).primero);
                 for(int k = 0; k < Transiciones.get(i).siguientes.size(); k++){
                     String d2 = ""+Transiciones.get(i).siguientes.get(k);
                     if((j+"").equals(d2)){
                         existe=true;
                     }
                 }
+            }*/
+            if(act.primero==true){
+                existe=true;
             }
-            if(!existe){
-                continua.add(j);
+            if(existe){
+                continua.add(act.identificadorH);
             }
         }
-        Transiciones.addFirst(new Estado("S0",continua));
+        System.out.println("CONTINUAAAAAA "+continua);
+        Transiciones.addFirst(new Estado("S0",continua,false));
         
         
         
@@ -246,7 +255,7 @@ public class transicions {
     public static String Automata(Metodos.Nodo n, String nombre, String ER){
         String tabla="digraph finite_state_machine {\n" +
 "	fontname=\"Helvetica,Arial,sans-serif\"\n" +
-"       label=\""+ER.replace("\"", "'")+"\""+
+"       label=\""+ER.replace("\"", "'").replace("\n", "\\\\n")+"\""+
 "	node [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
 "	edge [fontname=\"Helvetica,Arial,sans-serif\"]\n" +
 "	rankdir=LR;\n" +
@@ -254,13 +263,25 @@ public class transicions {
 "       node [shape = doublecircle]; S"+(Transiciones.size()-1)+";\n" +
 "	node [shape = circle];";
         
-
+        LinkedList expre = new LinkedList();
+        expre.add(ER.split(":")[0]);
         for(int i = 0; i < Transiciones.size(); i++) {
             for(int j = 0; j < Transiciones.get(i).ListaE.size(); j++){
                 String s2 = (String) Transiciones.get(i).ListaE.get(j).NEstado;
-                tabla += "S"+i+" -> "+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'")+"\"];\n";
+                LinkedList elemento = new LinkedList();
+                elemento.add("S"+i);
+                elemento.add(Transiciones.get(i).ListaE.get(j).Token);
+                elemento.add(s2);
+                
+                if(i==0){System.out.println("BOTELLLLASSASASASASAS");
+                    tabla += "iS"+i+" -> "+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'").replace("\\", "\\\\").replace("\n", "\\n")+"\"];\n";
+                }else{
+                    tabla += "S"+i+" -> "+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'").replace("\\", "\\\\").replace("\n", "\\n")+"\"];\n";
+                }
+                expre.add(elemento);
             }  
         }
+        Principal.automatas.add(expre);
         tabla+="}";
         //System.out.println(tabla);
         try {

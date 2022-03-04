@@ -13,6 +13,9 @@ import javax.swing.JOptionPane;
 import java.util.LinkedList;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 /**
@@ -26,6 +29,11 @@ public class Principal extends javax.swing.JFrame {
     }
     
     public LinkedList lista_evaluar;
+    public static LinkedList automatas = new LinkedList();
+    Sintax sintactico;
+    public static int cErrores = 0;
+    public static String DotErrores;
+    public static boolean existError=false;
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -56,10 +64,15 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1.setViewportView(txtArchivo);
 
         jButton1.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
-        jButton1.setText("Generar Autómatas");
+        jButton1.setText("Analizar Entradas");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnAnalizar.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
-        btnAnalizar.setText("Analizar Entradas");
+        btnAnalizar.setText("Generar Autómatas");
         btnAnalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAnalizarActionPerformed(evt);
@@ -119,15 +132,15 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(NRuta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(btnAnalizar)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnAnalizar)))
-                        .addGap(0, 689, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
+                                .addComponent(jButton1)))
+                        .addGap(0, 689, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -226,8 +239,17 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    public static void NotErrorL(String Error){
-        System.out.println("ERORRR "+Error);
+    public static void NotErrorL(String tipo, String descripcion, int linea, int columna){
+        cErrores++;
+        existError=true;
+        
+        DotErrores+="\t<TR>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"gold\">"+cErrores+"</TD>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"gold\">"+tipo+"</TD>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"gold\">Error en \""+descripcion.replace(">","").replace("\"","\\\"")+"\"</TD>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"gold\">"+columna+"</TD>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"gold\">"+linea+"</TD>\n" +
+        "\t</TR>";
     }
     
     public static void noExisteConj(String Error){
@@ -235,10 +257,24 @@ public class Principal extends javax.swing.JFrame {
     }
     
     private void btnAnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarActionPerformed
-        txtSalida.setText("");        
+        txtSalida.setText("");   
+        sintactico = new Sintax();
+        automatas = new LinkedList();
+        cErrores = 0;
+        DotErrores = "digraph G { \n" +
+        "\tlabel=<\n" +
+        "\t<TABLE border=\"5\" cellspacing=\"4\" cellpadding=\"10\" style=\"rounded\" bgcolor=\"green\" gradientangle=\"315\">\n" +
+        "\n" +
+        "\t<TR>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"orange\">#</TD>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"orange\">Tipo de error</TD>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"orange\">Descripcion</TD>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"orange\">Linea</TD>\n" +
+        "\t\t<TD border=\"3\" bgcolor=\"orange\">Columna</TD>\n" +
+        "\t</TR>";
         //String ST = txtArchivo.getText();
         //Sintax s = new Sintax(new LexC(new StringReader(ST)));
-        Sintax sintactico = new Sintax(new LexC(new BufferedReader( new StringReader(txtArchivo.getText()))));
+        sintactico = new Sintax(new LexC(new BufferedReader( new StringReader(txtArchivo.getText()))));
         try {
             
             LinkedList ER = new LinkedList();
@@ -258,46 +294,74 @@ public class Principal extends javax.swing.JFrame {
             //System.out.println("EXPRESION AAAA "+ER);
             LinkedList ERR=Metodos.ordenarExpresionRegular(ER);
             
-            LinkedList CONJ = sintactico.Conjuntos;
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            for (int i = 0; i < CONJ.size(); i++) {
-                LinkedList act = (LinkedList) CONJ.get(i);
-                System.out.println(act.getFirst());
+            if(!existError){
+                for (int i = 0; i < ER.size(); i++) {
+                    Metodos.TablaSig = new LinkedList();
+                    transiciones.Transiciones = new LinkedList();
+                    transiciones.Encabezados = new LinkedList();
+                    LinkedList Actual = (LinkedList) ERR.get(i);
+                    Metodos.Nodo ac = (Metodos.Nodo) Actual.getLast();
+                    //System.out.println("CONTENIDO "+Actual.getFirst()+Actual.get(1));
+                    Metodos.con=1;
+                    Metodos.noNodo=1;
+                    //***** VERIFICANDO ANULABLES *****
+                    Metodos.parametrosArbolito(ac);
+                    Metodos.parametros2Arbolito(ac);
+                    //*********************************
+                    Metodos.listaPrimeros(ac);
+                    Metodos.listaUltimos(ac);
+                    Metodos.grafica(ac,""+Actual.getFirst()+": "+Actual.get(1));
+                    //Metodos.recorrerArbolito(ac);
+                    //System.out.println(Metodos.dot);
+                    cuadro = txtSalida.getText();
+                    txtSalida.setText(cuadro+Metodos.generarImagen(""+Actual.getFirst())+"\n");
+                    Metodos.dot="";
+
+                    cuadro = txtSalida.getText();
+                    txtSalida.setText(cuadro+Metodos.tablaSiguientes(ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
+
+                    cuadro = txtSalida.getText();
+                    txtSalida.setText(cuadro+transicions.tablaEstados(Metodos.TablaSig, ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
+
+                    cuadro = txtSalida.getText();
+                    txtSalida.setText(cuadro+transicions.Automata( ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
+
+                }
+            }else{
+                DotErrores+="</TABLE>>\n" +
+                "}";
+                
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyyyhhmmss");
+                String nombre = dtf.format(LocalDateTime.now());
+                try {
+                    String ruta = "ERRORES_202004765\\ERRORES_"+nombre+".dot";
+
+                    File file = new File(ruta);
+                    // Si el archivo no existe es creado
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+                    FileWriter fw = new FileWriter(file);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    bw.write(DotErrores);
+                    bw.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Ocurrió un error al generar \"ERRORES_"+nombre+".dot\"");
+                }
+
+                try {
+                    String cmd = "bin\\dot.exe -Tpng ERRORES_202004765\\ERRORES_"+nombre+".dot -o ERRORES_202004765\\ERRORES_"+nombre+".png";
+                    Runtime.getRuntime().exec(cmd); 
+                } catch (IOException ioe) {
+                    System.out.println (ioe);
+                    System.out.println( "Ocurrió un error al generar \"ERRORES_"+nombre+".png\"");
+                }
+                
+                txtSalida.setText("ERRORES LEXICOS y/o SINTACTICOS DETECTADOS, PORFAVOR REVISE EL REPORTE DE ERRORES");
+                txtSalida.setForeground(Color.red);
+                existError=false;
             }
-            
-            for (int i = 0; i < ER.size(); i++) {
-                Metodos.TablaSig = new LinkedList();
-                transiciones.Transiciones = new LinkedList();
-                transiciones.Encabezados = new LinkedList();
-                LinkedList Actual = (LinkedList) ERR.get(i);
-                Metodos.Nodo ac = (Metodos.Nodo) Actual.getLast();
-                //System.out.println("CONTENIDO "+Actual.getFirst()+Actual.get(1));
-                Metodos.con=1;
-                Metodos.noNodo=1;
-                //***** VERIFICANDO ANULABLES *****
-                Metodos.parametrosArbolito(ac);
-                Metodos.parametros2Arbolito(ac);
-                //*********************************
-                Metodos.listaPrimeros(ac);
-                Metodos.listaUltimos(ac);
-                Metodos.grafica(ac,""+Actual.getFirst()+": "+Actual.get(1));
-                //Metodos.recorrerArbolito(ac);
-                //System.out.println(Metodos.dot);
-                cuadro = txtSalida.getText();
-                txtSalida.setText(cuadro+Metodos.generarImagen(""+Actual.getFirst())+"\n");
-                Metodos.dot="";
-                
-                cuadro = txtSalida.getText();
-                txtSalida.setText(cuadro+Metodos.tablaSiguientes(ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
-                
-                cuadro = txtSalida.getText();
-                txtSalida.setText(cuadro+transicions.tablaEstados(Metodos.TablaSig, ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
-                
-                cuadro = txtSalida.getText();
-                txtSalida.setText(cuadro+transicions.Automata( ac,""+Actual.getFirst(),""+Actual.getFirst()+": "+Actual.get(1))+"\n");
-                
-            }
-            
             sintactico.ExpT=new LinkedList();
             //String cadena = Metodos.obtener(ST);
             //txtSalida.setText(cadena);
@@ -308,6 +372,18 @@ public class Principal extends javax.swing.JFrame {
             //txtSalida.setForeground(Color.red);
         }
     }//GEN-LAST:event_btnAnalizarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(automatas.size()!=0){
+            LinkedList CONJ = sintactico.Conjuntos;
+            LinkedList PRUEBA = sintactico.EProbar;
+            AnalizarCadena.analiza(CONJ, PRUEBA, automatas);
+        }else{
+            txtSalida.setText("PORFAVOR GENERE AUTOMATAS");
+            txtSalida.setForeground(Color.red);
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String args[]) {
 

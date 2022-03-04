@@ -1,28 +1,15 @@
 {
 //CONJUNTOS
-CONJ : letra -> a~z;
-CONJ : digito -> 0~9;
+CONJ:letra->a~z;
+CONJ:digito->0~9;
+CONJ:especial->!~&;
+CONJ: vocales->a,e,i,o,u;
 
 //EXPRESIONES REGULARES
 ExpReg1 -> .{letra}+|"_"|{letra}{digito};
 ExpresionReg2 -> .{letra}*|"_"|{letra}{digito};
-
-%%
-%%
-
-ExpReg1: "Lexemaprimero";
-ExpresionReg2 : "33.3";
-}
-
-{
-//CONJUNTOS
-CONJ : letra -> a~z;
-CONJ : digito -> 0~9;
-
-//EXPRESIONES REGULARES
-ExpReg1 -> .|{digito}{letra}+|"_"|{letra}{digito};
-ExpresionReg2 -> .|{digito}{letra}*|"_"|{letra}{digito};
 decimal->..+{digito}"."+{digito};
+Raro->+..{vocales}?{especial}"\n";
 
 %%
 %%
