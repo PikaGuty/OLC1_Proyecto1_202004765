@@ -1,6 +1,7 @@
 package Analizadores;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +17,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 
 /**
@@ -34,6 +38,9 @@ public class Principal extends javax.swing.JFrame {
     public static int cErrores = 0;
     public static String DotErrores;
     public static boolean existError=false;
+    
+    private ImageIcon image;
+    private Icon icon;
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -46,6 +53,8 @@ public class Principal extends javax.swing.JFrame {
         btnAnalizar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtSalida = new javax.swing.JTextArea();
+        lblImagen = new javax.swing.JLabel();
+        VerImagen = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -84,6 +93,16 @@ public class Principal extends javax.swing.JFrame {
         txtSalida.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
         txtSalida.setRows(5);
         jScrollPane2.setViewportView(txtSalida);
+
+        lblImagen.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        VerImagen.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
+        VerImagen.setText("Ver Imagen");
+        VerImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                VerImagenActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Archivo");
         jMenu1.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
@@ -134,13 +153,17 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(NRuta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnAnalizar)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1)))
-                        .addGap(0, 689, Short.MAX_VALUE)))
+                                .addComponent(jButton1)
+                                .addGap(18, 18, 18)
+                                .addComponent(VerImagen))
+                            .addComponent(jScrollPane1))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 595, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 48, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -149,11 +172,15 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(NRuta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(btnAnalizar))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(btnAnalizar)
+                            .addComponent(VerImagen)))
+                    .addComponent(lblImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -252,6 +279,19 @@ public class Principal extends javax.swing.JFrame {
         "\t</TR>";
     }
     
+    private void visualizarImagen(JLabel lbl,String ruta){
+        lbl.setIcon(null);
+        this.image = new ImageIcon(ruta);
+        this.icon = new ImageIcon(
+                this.image.getImage().getScaledInstance(
+                        lbl.getWidth(),
+                        lbl.getHeight(),
+                        Image.SCALE_DEFAULT)
+        );
+        lbl.setIcon(this.icon);
+        this.repaint();
+    }
+    
     public static void noExisteConj(String Error){
         System.out.println("NO EXISTE EL CONJUNTO: "+Error);
     }
@@ -261,17 +301,43 @@ public class Principal extends javax.swing.JFrame {
         sintactico = new Sintax();
         automatas = new LinkedList();
         cErrores = 0;
-        DotErrores = "digraph G { \n" +
-        "\tlabel=<\n" +
-        "\t<TABLE border=\"5\" cellspacing=\"4\" cellpadding=\"10\" style=\"rounded\" bgcolor=\"green\" gradientangle=\"315\">\n" +
-        "\n" +
-        "\t<TR>\n" +
-        "\t\t<TD border=\"3\" bgcolor=\"orange\">#</TD>\n" +
-        "\t\t<TD border=\"3\" bgcolor=\"orange\">Tipo de error</TD>\n" +
-        "\t\t<TD border=\"3\" bgcolor=\"orange\">Descripcion</TD>\n" +
-        "\t\t<TD border=\"3\" bgcolor=\"orange\">Linea</TD>\n" +
-        "\t\t<TD border=\"3\" bgcolor=\"orange\">Columna</TD>\n" +
-        "\t</TR>";
+        DotErrores = "<!DOCTYPE html>\n" +
+"    <html lang=\"en\">\n" +
+"        <head>\n" +
+"            <meta charset=\"utf-8\" />\n" +
+"            <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\" />\n" +
+"            <meta name=\"description\" content=\"\" />\n" +
+"            <meta name=\"author\" content=\"\" />\n" +
+"            <title>Lista de Errores</title>\n" +
+"            <link rel=\"icon\" type=\"image/x-icon\" href=\"assets/favicon.ico\" />\n" +
+"            <script src=\"https://use.fontawesome.com/releases/v5.15.3/js/all.js\" crossorigin=\"anonymous\"></script>\n" +
+"            <link href=\"https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css\" rel=\"stylesheet\" />\n" +
+"            <link href=\"https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic\" rel=\"stylesheet\" type=\"text/css\" />\n" +
+"            <link href=\"css/styles.css\" rel=\"stylesheet\" />\n" +
+"        </head>\n" +
+"\n" +
+"        <body id=\"page-top\">\n" +
+"            \n" +
+"\n" +
+"            <header class=\"masthead d-flex align-items-center\">\n" +
+"                <div class=\"container px-4 px-lg-5 text-center\">\n" +
+"                    <h1 class=\"mb-1\">Lista de Errores</h1>\n" +
+"                </div>\n" +
+"            </header>\n" +
+"\n" +
+"            <section class=\"content-section bg-light\" id=\"about\">\n" +
+"                <div class=\"container px-4 px-lg-5 text-center\">\n" +
+"                    <table class=\"table table-striped table-dark\">\n" +
+"                        <thead>\n" +
+"                            <tr>\n" +
+"                            <th scope=\"col\">#</th>\n" +
+"                            <th scope=\"col\">Tipo de error</th>\n" +
+"                            <th scope=\"col\">Descripcion</th>\n" +
+"                            <th scope=\"col\">Linea</th>\n" +
+"                            <th scope=\"col\">Columna</th>\n" +
+"                            </tr>\n" +
+"                        </thead>\n" +
+"                        <tbody>";
         //String ST = txtArchivo.getText();
         //Sintax s = new Sintax(new LexC(new StringReader(ST)));
         sintactico = new Sintax(new LexC(new BufferedReader( new StringReader(txtArchivo.getText()))));
@@ -328,13 +394,16 @@ public class Principal extends javax.swing.JFrame {
 
                 }
             }else{
-                DotErrores+="</TABLE>>\n" +
-                "}";
+                DotErrores+="<a class=\"scroll-to-top rounded\" href=\"#page-top\"><i class=\"fas fa-angle-up\"></i></a>\n" +
+"                    <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js\"></script>\n" +
+"                    <script src=\"js/scripts.js\"></script>\n" +
+"                </body>\n" +
+"            </html>";
                 
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyyyhhmmss");
-                String nombre = dtf.format(LocalDateTime.now());
+                //String nombre = dtf.format(LocalDateTime.now());
                 try {
-                    String ruta = "ERRORES_202004765\\ERRORES_"+nombre+".dot";
+                    String ruta = "ERRORES_202004765\\ERRORES.html";
 
                     File file = new File(ruta);
                     // Si el archivo no existe es creado
@@ -347,16 +416,9 @@ public class Principal extends javax.swing.JFrame {
                     bw.close();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("Ocurrió un error al generar \"ERRORES_"+nombre+".dot\"");
+                    System.out.println("Ocurrió un error al generar \"ERRORES.html\"");
                 }
 
-                try {
-                    String cmd = "bin\\dot.exe -Tpng ERRORES_202004765\\ERRORES_"+nombre+".dot -o ERRORES_202004765\\ERRORES_"+nombre+".png";
-                    Runtime.getRuntime().exec(cmd); 
-                } catch (IOException ioe) {
-                    System.out.println (ioe);
-                    System.out.println( "Ocurrió un error al generar \"ERRORES_"+nombre+".png\"");
-                }
                 
                 txtSalida.setText("ERRORES LEXICOS y/o SINTACTICOS DETECTADOS, PORFAVOR REVISE EL REPORTE DE ERRORES");
                 txtSalida.setForeground(Color.red);
@@ -375,15 +437,31 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(automatas.size()!=0){
-            LinkedList CONJ = sintactico.Conjuntos;
-            LinkedList PRUEBA = sintactico.EProbar;
-            AnalizarCadena.analiza(CONJ, PRUEBA, automatas);
+            try{
+                LinkedList CONJ = sintactico.Conjuntos;
+                LinkedList PRUEBA = sintactico.EProbar;
+                String prueba = AnalizarCadena.analiza(CONJ, PRUEBA, automatas);
+                txtSalida.setText(prueba+"\n"+AnalizarCadena.json);
+                txtSalida.setForeground(new Color(25, 111, 61));
+            }catch(Exception e){
+                txtSalida.setText("HA OCURRIDO UN ERROR");
+                txtSalida.setForeground(Color.red);
+            }
         }else{
             txtSalida.setText("PORFAVOR GENERE AUTOMATAS");
             txtSalida.setForeground(Color.red);
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void VerImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerImagenActionPerformed
+        JFileChooser jfile = new JFileChooser();
+        int resultado = jfile.showOpenDialog(this);
+        if(resultado!=JFileChooser.CANCEL_OPTION){
+            File fileName = jfile.getSelectedFile();
+            this.visualizarImagen(lblImagen, fileName.getAbsolutePath());
+        }
+    }//GEN-LAST:event_VerImagenActionPerformed
 
     public static void main(String args[]) {
 
@@ -396,6 +474,7 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel NRuta;
+    private javax.swing.JButton VerImagen;
     private javax.swing.JButton btnAnalizar;
     private javax.swing.JButton jButton1;
     private javax.swing.JMenu jMenu1;
@@ -406,6 +485,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblImagen;
     private javax.swing.JTextArea txtArchivo;
     private javax.swing.JTextArea txtSalida;
     // End of variables declaration//GEN-END:variables

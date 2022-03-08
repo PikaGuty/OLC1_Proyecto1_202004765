@@ -45,7 +45,7 @@ CABECERA ::= decConjuntos CABECERA | ExpReg CABECERA | decConjuntos | ExpReg | e
 PIE ::= Probador PIE | Probador | error PTCOMA ;
 
 decConjuntos ::= Reservadas DPUNTOS Identificador:r FLECHA tConjuntos:a PTCOMA     {: RESULT = a; Conjunto.add(r); Conjunto.add(a); Conjuntos.add(Conjunto); Conjunto= new LinkedList(); :}; 
-tConjuntos ::= LETRAU:a  TILD LETRAU:c {: RESULT=a+"-"+c; :}| DIGITU:a TILD DIGITU:c {: RESULT=a+"-"+c; :}| vConj {:  RESULT=caracteresI; caracteresI = new LinkedList(); :}| CARACT:a  TILD CARACT:c {: RESULT=a+"-"+c; :};
+tConjuntos ::= LETRAU:a  TILD LETRAU:c {: RESULT=a+"~"+c; :}| DIGITU:a TILD DIGITU:c {: RESULT=a+"~"+c; :}| vConj {:  RESULT=caracteresI; caracteresI = new LinkedList(); :}| CARACT:a  TILD CARACT:c {: RESULT=a+"~"+c; :};
 
 vConj ::= LETRAU:a {: caracteresI.add(a+""); :} | LETRAU:a vConjL {: caracteresI.add(a+""); :} | DIGITU:a {: caracteresI.add(a+""); :} | DIGITU:a vConjD {: caracteresI.add(a+""); :};
 vConjL ::= COMA LETRAU:a vConjL  {: caracteresI.add(a+""); :} | COMA LETRAU:a {: caracteresI.add(a+""); :};

@@ -1,0 +1,22 @@
+[
+	{
+		"Valor":"Lexemaprimero",
+		"Expresion Regular":"ExpReg1",
+		"Resultado":"CADENA INVALIDA"
+	},
+	{
+		"Valor":"lex_23_a2",
+		"Expresion Regular":"ExpresionReg2",
+		"Resultado":"CADENA VALIDA"
+	},
+	{
+		"Valor":"34.51",
+		"Expresion Regular":"decimal",
+		"Resultado":"CADENA VALIDA"
+	},
+	{
+		"Valor":"a$\n",
+		"Expresion Regular":"Raro",
+		"Resultado":"CADENA VALIDA"
+	}
+]

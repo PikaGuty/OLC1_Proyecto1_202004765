@@ -111,7 +111,6 @@ public class Metodos {
             }
             //System.out.println(cadena);
             recorrerArbolito(arbolitos.getFirst().getArbol());
-            anterior=null;
             identificarPrimeros(arbolitos.getFirst().getArbol(),null);
             //graficarArbolito(arbolitos.getFirst().getArbol());
             //System.out.println("DOT");
@@ -483,17 +482,32 @@ public class Metodos {
     public static void identificarPrimeros(Nodo n,Nodo ant){
         if (n!=null){
             identificarPrimeros(n.izquierda,n);
-            //System.out.println("CONTENIDO "+n.contenido);
-            if("+".equals(n.contenido)||"?".equals(n.contenido)||"*".equals(n.contenido)||".".equals(n.contenido)){
+            System.out.println("CONTENIDO "+n.contenido);
+            if("+".equals(n.contenido)||"*".equals(n.contenido)||".".equals(n.contenido)){
                 try{
+                    if(primeros){
+                        if("*".equals(n.contenido)){
+                            n.izquierda.primero=false;
+                        }
+                        if("?".equals(n.izquierda.contenido)){
+                            n.derecha.primero=true;
+                        }
+                    }
+                    
                     if(!"|".equals(ant.contenido)){
                         primeros=false;
                     }
+                    
+                    
                 }catch(Exception e){
                         
                 }
             }
-            n.primero=primeros;
+            if(n.primero!=true){
+                n.primero=primeros;
+            }
+            System.out.println("METIENDO "+n.primero);
+                
             identificarPrimeros(n.derecha,n);
         }
     }

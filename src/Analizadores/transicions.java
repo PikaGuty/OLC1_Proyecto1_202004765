@@ -265,6 +265,8 @@ public class transicions {
         
         LinkedList expre = new LinkedList();
         expre.add(ER.split(":")[0]);
+        boolean primero = true;
+        int pri = 0;
         for(int i = 0; i < Transiciones.size(); i++) {
             for(int j = 0; j < Transiciones.get(i).ListaE.size(); j++){
                 String s2 = (String) Transiciones.get(i).ListaE.get(j).NEstado;
@@ -273,10 +275,27 @@ public class transicions {
                 elemento.add(Transiciones.get(i).ListaE.get(j).Token);
                 elemento.add(s2);
                 
-                if(i==0){System.out.println("BOTELLLLASSASASASASAS");
-                    tabla += "iS"+i+" -> "+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'").replace("\\", "\\\\").replace("\n", "\\n")+"\"];\n";
+                if(primero){
+                    pri = i;
+                    //System.out.println("S"+pri+" = "+Transiciones.get(i).ListaE.get(j).Token);
+                    if(("S"+pri).equals(Transiciones.get(i).ListaE.get(j).Token)){
+                        tabla += "iS"+i+" -> i"+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'").replace("\\", "\\\\").replace("\n", "\\n")+"\"];\n";
+                    }else{
+                        tabla += "iS"+i+" -> "+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'").replace("\\", "\\\\").replace("\n", "\\n")+"\"];\n";
+                    }
+                    primero = false;
+                    
                 }else{
-                    tabla += "S"+i+" -> "+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'").replace("\\", "\\\\").replace("\n", "\\n")+"\"];\n";
+                    if(pri==i){
+                        System.out.println("S"+pri+" = "+Transiciones.get(i).ListaE.get(j).Token);
+                        if(("S"+pri).equals(Transiciones.get(i).ListaE.get(j).Token)){
+                            tabla += "iS"+i+" -> i"+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'").replace("\\", "\\\\").replace("\n", "\\n")+"\"];\n";
+                        }else{
+                            tabla += "iS"+i+" -> "+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'").replace("\\", "\\\\").replace("\n", "\\n")+"\"];\n";
+                        }
+                    }else{
+                        tabla += "S"+i+" -> "+Transiciones.get(i).ListaE.get(j).Token+" [label = \""+s2.replace("\"", "'").replace("\\", "\\\\").replace("\n", "\\n")+"\"];\n";
+                    }
                 }
                 expre.add(elemento);
             }  

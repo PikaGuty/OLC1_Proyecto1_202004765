@@ -1,0 +1,36 @@
+Gramatica Libre de Contexto
+
+G=(V,T,P,S)
+
+V Conjunto de variables
+decConjuntos, tConjuntos,vConj, vConjL, vConjD, Probador, 
+ExpReg, ER, CONTENIDO, CABECERA, PIE, CARACT
+
+T Conjunto de terminales
+PTCOMA, Reservadas, SEPARADOR, STRING, LLAVEI,LLAVEF, DPUNTOS, FLECHA, 
+Identificador, TILD, ERROR, LETRAU, DIGITU,SIMBOLO,PUNTO, ASTERISCO, BARRA, 
+PARENTESISI, PARENTESISF, CORCHETEI, CORCHETEF,COMA,INTERROG,MAS,COMDOB
+
+P Conjunto finito de producciones
+<INICIO> ::= LLAVEI <CONTENIDO> LLAVEF
+
+<CONTENIDO> ::= <CABECERA> <SEPARADOR> <PIE>  | error LLAVEF 
+<CABECERA> ::= <decConjuntos> <CABECERA> | <ExpReg> <CABECERA> | <decConjuntos> | <ExpReg> | error PTCOMA 
+<PIE> ::= Probador <PIE> | <Probador> | error PTCOMA 
+
+<decConjuntos> ::= Reservadas DPUNTOS Identificador FLECHA <tConjuntos> 
+<tConjuntos> ::= LETRAU TILD LETRAU | DIGITU TILD DIGITU | <vConj> | CARACT TILD CARACT
+
+<vConj> ::= LETRAU| LETRAU <vConjL> | DIGITU | DIGITU
+<vConjL> ::= COMA LETRAU <vConjL> | COMA LETRAU
+<vConjD> ::= COMA DIGITU <vConjD> | COMA DIGITU
+
+<CARACT> ::= PTCOMA | LLAVEI | LLAVEF | PARENTESISI | PARENTESISF | CORCHETEI | CORCHETEF | DPUNTOS | PUNTO | COMA | ASTERISCO | BARRA | MAS | INTERROG | COMDOB | SIMBOLO
+
+<Probador> ::= Identificador DPUNTOS STRING PTCOMA
+
+<ExpReg> ::= Identificador FLECHA <ER> PTCOMA
+<ER> ::= LLAVEI Identificador LLAVEF | ASTERISCO | MAS | INTERROG | BARRA | PUNTO | STRING | CORCHETEI <tConjuntos> CORCHETEF | LLAVEI Identificador LLAVEF <ER>| ASTERISCO <ER> | MAS <ER> | INTERROG <ER> | BARRA <ER> | PUNTO <ER> | STRING <ER> | CORCHETEI tConjuntos CORCHETEF <ER>;
+
+S Simbolo Inicial
+INICIO
